@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from 'cheerio';
-import { extractPrice } from "../utils";
+import { extractCurrency, extractPrice } from "../utils";
 
 export async function scrapAmazonProduct(url:string) {
     if(!url) return;
@@ -55,8 +55,15 @@ $('#landingImage').attr('data-a-dynamic-image')||
 '{}'        
 
 const imageUrls = Object.keys(JSON.parse(images));
+const currency = extractCurrency($('.a-price-symbol'))
+const discountRate =$('.savingsPercentage').text().replace(/[-%]/g,"")
+console.log({title,currentPrice,originalPrice,outOfStock,imageUrls,currency,discountRate})
 
-console.log({title,currentPrice,originalPrice,outOfStock,imageUrls})
+// construct data objects with scraped information
+// const data ={
+//     url,
+//     currency: currency || '$',
+// }
 
     } catch(error:any){
         throw new Error(`Failed to scrap product: ${error.message}`)
